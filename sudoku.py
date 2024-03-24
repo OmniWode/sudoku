@@ -1,5 +1,6 @@
 import random
 
+# makes a blank puzzle
 def make_blank():
     row1 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     row2 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -15,6 +16,7 @@ def make_blank():
 
     return blank
 
+# makes a valid sample board for testing
 def make_sample():
     row1 = [5, 3, 4, 6, 7, 8, 9, 1, 2]
     row2 = [6, 7, 2, 1, 9, 5, 3, 4, 8]
@@ -30,7 +32,7 @@ def make_sample():
     
     return sample
 
-
+# makes a clear pattern for testing
 def make_test():
     puzzle = make_blank()
     puzzle[1][1] = 1
@@ -45,15 +47,15 @@ def make_test():
 
     return puzzle
 
+# seeds puzzle with random first row
 def random_seed(puzzle):
-    digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
     for col in range(9):
         options = find_options(puzzle,0,col)
         puzzle[0][col] = random.choice(options)
 
     return puzzle
 
+# old puzzle generation
 '''
 def generate_sudoku():
     puzzle = init_puzzle()
@@ -100,17 +102,21 @@ def generate_sudoku():
 
 '''
 
+# new puzzle generation
 def generate_sudoku():
     puzzle = make_blank()
     puzzle = random_seed(puzzle)
 
     return puzzle
 
+# chooses randomly from list of possible options
 def choose_option(options):
     element = random.choice(options)
 
     return element
 
+# makes list of valid values for a given [row][col] 
+# given current state of the puzzle
 def find_options(puzzle, row, col):
     options = []
 
@@ -124,6 +130,7 @@ def find_options(puzzle, row, col):
 
     return options
 
+# checks if given value is already in row
 def check_row(puzzle, row, value):
     if value in puzzle[row]:
         valid = False
@@ -132,6 +139,7 @@ def check_row(puzzle, row, value):
 
     return valid
 
+# checks if given value is already in col
 def check_col(puzzle, col, value):
     compare = []
     for row in range(9):
@@ -144,6 +152,7 @@ def check_col(puzzle, col, value):
 
     return valid
 
+# checks if given value is already in group
 def check_group(puzzle, row, col, value):
     group = find_group(puzzle, row, col)
     
@@ -160,6 +169,7 @@ def check_group(puzzle, row, col, value):
 
     return valid
 
+# creates list of existing values in local 3x3 subgroup
 def find_group(puzzle, row, col):
     group = []
 
@@ -172,6 +182,7 @@ def find_group(puzzle, row, col):
 
     return group
 
+# prints a given puzzle nicely with group dividers
 def print_sudoku(puzzle):      
     for row in range(9):
         for col in range(9):
@@ -184,6 +195,7 @@ def print_sudoku(puzzle):
             print('------|-------|------')
         
 
+# runs the show
 def main():
     #puzzle = make_sample()
     #puzzle = make_blank()
