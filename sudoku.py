@@ -1,5 +1,20 @@
 import random
 
+def make_blank():
+    row1 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    row2 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    row3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    row4 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    row5 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    row6 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    row7 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    row8 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    row9 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    
+    blank = [row1, row2, row3, row4, row5, row6, row7, row8, row9]
+
+    return blank
+
 def make_sample():
     row1 = [5, 3, 4, 6, 7, 8, 9, 1, 2]
     row2 = [6, 7, 2, 1, 9, 5, 3, 4, 8]
@@ -15,30 +30,31 @@ def make_sample():
     
     return sample
 
-def make_blank():
-    return init_puzzle()
 
 def make_test():
-    puzzle = init_puzzle()
-    puzzle[0][3] = 1
+    puzzle = make_blank()
+    puzzle[1][1] = 1
+    puzzle[1][4] = 2
+    puzzle[1][7] = 3
+    puzzle[4][1] = 4
+    puzzle[4][4] = 5
+    puzzle[4][7] = 6
+    puzzle[7][1] = 7
+    puzzle[7][4] = 8
+    puzzle[7][7] = 9
 
     return puzzle
 
-def init_puzzle():
-    row1 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    row2 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    row3 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    row4 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    row5 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    row6 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    row7 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    row8 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    row9 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    
-    blank = [row1, row2, row3, row4, row5, row6, row7, row8, row9]
+def random_seed(puzzle):
+    digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-    return blank
+    for col in range(9):
+        options = find_options(puzzle,0,col)
+        puzzle[0][col] = random.choice(options)
 
+    return puzzle
+
+'''
 def generate_sudoku():
     puzzle = init_puzzle()
     cell_count = 0
@@ -54,19 +70,25 @@ def generate_sudoku():
             cell_count += 1
             options = find_options(puzzle, row, col)
 
+            ## DEBUG TIME
             print("\nDEBUG TIME\n")
             print("cell count: ", cell_count)
             print("options for cell[",row,"][",col,"]: ", options,"\n")
 
+            #smarter find_options() should always return list of valid options
+            #but still including this check as error handling
             if len(options) > 0:
                 element = choose_option(options)
                 puzzle[row][col] = element
+                ## DEBUG TIME
                 print("selected element: ", element)
             else:
+                ## DEBUG TIME
                 print("!!IMPOSSIBLE GAME!!")
                 print("!!THIS IS A BAD FORK - ABORT!!")
                 break
 
+            ## DEBUG TIME
             print_sudoku(puzzle)   
             print('\n------------------------------------------------------\n')
 
@@ -76,10 +98,16 @@ def generate_sudoku():
 
     return puzzle
 
+'''
+
+def generate_sudoku():
+    puzzle = make_blank()
+    puzzle = random_seed(puzzle)
+
+    return puzzle
+
 def choose_option(options):
     element = random.choice(options)
-    
-    print('adding some nonsene to the code to test git branches')
 
     return element
 
