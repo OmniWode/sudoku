@@ -59,7 +59,7 @@ def generate_sudoku():
             print("options for cell[",row,"][",col,"]: ", options,"\n")
 
             if len(options) > 0:
-                element = random.choice(options)
+                element = choose_option(options)
                 puzzle[row][col] = element
                 print("selected element: ", element)
             else:
@@ -75,6 +75,11 @@ def generate_sudoku():
         break
 
     return puzzle
+
+def choose_option(options):
+    element = random.choice(options)
+
+    return element
 
 def find_options(puzzle, row, col):
     options = []
