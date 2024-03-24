@@ -78,6 +78,8 @@ def generate_sudoku():
 
 def choose_option(options):
     element = random.choice(options)
+    
+    print('adding some nonsene to the code to test git branches')
 
     return element
 
