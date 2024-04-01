@@ -1,3 +1,8 @@
+# generates a valid sudoku puzzle
+#
+# based on solution on 
+# https://www.geeksforgeeks.org/sudoku-backtracking-7/
+
 import random
 
 # makes a blank puzzle
@@ -55,54 +60,7 @@ def random_seed(puzzle):
 
     return puzzle
 
-# old puzzle generation
-'''
-def generate_sudoku():
-    puzzle = init_puzzle()
-    cell_count = 0
-    
-    ### digit example
-    for digit in range(1, 10):
-        print(digit)
-    print('---------')
-    ###
-
-    for row in range(9):
-        for col in range(9):
-            cell_count += 1
-            options = find_options(puzzle, row, col)
-
-            ## DEBUG TIME
-            print("\nDEBUG TIME\n")
-            print("cell count: ", cell_count)
-            print("options for cell[",row,"][",col,"]: ", options,"\n")
-
-            #smarter find_options() should always return list of valid options
-            #but still including this check as error handling
-            if len(options) > 0:
-                element = choose_option(options)
-                puzzle[row][col] = element
-                ## DEBUG TIME
-                print("selected element: ", element)
-            else:
-                ## DEBUG TIME
-                print("!!IMPOSSIBLE GAME!!")
-                print("!!THIS IS A BAD FORK - ABORT!!")
-                break
-
-            ## DEBUG TIME
-            print_sudoku(puzzle)   
-            print('\n------------------------------------------------------\n')
-
-        else:
-            continue
-        break
-
-    return puzzle
-
-'''
-
-# new puzzle generation
+# main puzzzle generation loop
 def generate_sudoku():
     puzzle = make_blank()
     puzzle = random_seed(puzzle)
@@ -119,15 +77,12 @@ def solve_puzzle(puzzle):
     if complete_puzzle(puzzle):
         return True
     
-    empty_space = [0,0]
-    empty_space = find_empty(puzzle,empty_space)
+    next_empty = [0,0]
+    next_empty = find_empty(puzzle,next_empty)
 
-    row = empty_space[0]
-    col = empty_space[1]
-
-    #options = find_options(puzzle,row,col)
-    #value = choose_option(options)
-
+    row = next_empty[0]
+    col = next_empty[1]
+    
     for num in range(1,10):
         if(is_safe(puzzle,row,col,num)):
             puzzle[row][col] = num
@@ -136,15 +91,18 @@ def solve_puzzle(puzzle):
                 return True
             
             puzzle[row][col] = 0
+    
 
     return False
 
+# chckes if puzzle is fully filled
 def complete_puzzle(puzzle):
     if puzzle[8][8] == 0:
         return False
     else:
         return True
     
+# returns a list with the coordinates of the next empty [row,col]
 def find_empty(puzzle,list):
     for r in range(0,9):
         for c in range(0,9):
@@ -154,6 +112,7 @@ def find_empty(puzzle,list):
                 return list
     return list
 
+# returns true if puzzle[row][col] = value is a valid placement
 def is_safe(puzzle, row, col, value):
     valid_row = check_row(puzzle,row,value)
     valid_col = check_col(puzzle,col,value)
@@ -216,12 +175,6 @@ def check_group(puzzle, row, col, value):
     else:
         valid = True
     
-    '''
-    print("checking group for value: ", value)
-    print("existing members of group for [",row,"][",col,"]: ", group)
-    print("value ",value," is valid: ",valid,"\n")
-    '''
-
     return valid
 
 # creates list of existing values in local 3x3 subgroup
@@ -256,15 +209,9 @@ def main():
     #puzzle = make_blank()
     
     puzzle = generate_sudoku()
-    #puzzle = make_test()
-
 
     print("\n==FINAL PUZZLE STATE==\n")
     print_sudoku(puzzle)
-    #group = find_group(puzzle, 6, 6)
-    #print(group)
-
-    
 
 
 if __name__ == "__main__":
