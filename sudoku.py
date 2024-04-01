@@ -82,8 +82,10 @@ def solve_puzzle(puzzle):
 
     row = next_empty[0]
     col = next_empty[1]
-    
-    for num in range(1,10):
+
+    options = randomizer()
+
+    for num in options:
         if(is_safe(puzzle,row,col,num)):
             puzzle[row][col] = num
 
@@ -91,9 +93,24 @@ def solve_puzzle(puzzle):
                 return True
             
             puzzle[row][col] = 0
-    
 
     return False
+
+# generates a list of digits in random order to randomize generator
+def randomizer():
+    digits = [1,2,3,4,5,6,7,8,9]
+    options = []
+    remain = 9
+
+    while remain > 0:
+        n = random.randint(0,remain - 1)
+
+        options.append(digits[n])
+        digits.pop(n)
+        remain -= 1
+
+    return options
+        
 
 # chckes if puzzle is fully filled
 def complete_puzzle(puzzle):
