@@ -107,7 +107,62 @@ def generate_sudoku():
     puzzle = make_blank()
     puzzle = random_seed(puzzle)
 
-    return puzzle
+    if solve_puzzle(puzzle):
+        return puzzle
+    else:
+        puzzle = make_blank
+        print("BLAAAAHHHHHH ERROR")
+        return puzzle
+
+# recursive funcution call 
+def solve_puzzle(puzzle):
+    if complete_puzzle(puzzle):
+        return True
+    
+    empty_space = [0,0]
+    empty_space = find_empty(puzzle,empty_space)
+
+    row = empty_space[0]
+    col = empty_space[1]
+
+    #options = find_options(puzzle,row,col)
+    #value = choose_option(options)
+
+    for num in range(1,10):
+        if(is_safe(puzzle,row,col,num)):
+            puzzle[row][col] = num
+
+            if solve_puzzle(puzzle):
+                return True
+            
+            puzzle[row][col] = 0
+
+    return False
+
+def complete_puzzle(puzzle):
+    if puzzle[8][8] == 0:
+        return False
+    else:
+        return True
+    
+def find_empty(puzzle,list):
+    for r in range(0,9):
+        for c in range(0,9):
+            if puzzle[r][c] == 0:
+                list[0] = r
+                list[1] = c
+                return list
+    return list
+
+def is_safe(puzzle, row, col, value):
+    valid_row = check_row(puzzle,row,value)
+    valid_col = check_col(puzzle,col,value)
+    valid_group = check_group(puzzle,row,col,value)
+
+    if(valid_row and valid_col and valid_group):
+        return True
+    else:
+        return False
 
 # chooses randomly from list of possible options
 def choose_option(options):
